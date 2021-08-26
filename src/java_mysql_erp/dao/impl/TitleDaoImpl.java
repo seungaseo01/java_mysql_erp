@@ -26,11 +26,11 @@ public class TitleDaoImpl implements TitleDao {
 	public ArrayList<Title> selectTitleByAll() {
 		String sql = "select code,name from title";
 		ArrayList<Title> list = new ArrayList<Title>();
-		
+
 		try (Connection con = JdbcUtil.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql);
 				ResultSet rs = pstmt.executeQuery()) {
-			
+
 			while (rs.next()) {
 				list.add(getTitle(rs));
 			}
@@ -38,7 +38,7 @@ public class TitleDaoImpl implements TitleDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return list;//size가 0이거나 그렇지 않은 경우
+		return list;// size가 0이거나 그렇지 않은 경우
 	}
 
 	private Title getTitle(ResultSet rs) throws SQLException {
@@ -49,7 +49,21 @@ public class TitleDaoImpl implements TitleDao {
 
 	@Override
 	public Title selectTitleByCode(Title title) {
-		// TODO Auto-generated method stub
+		String sql = "select  code,name from title where code = ? ";
+		try (Connection con = JdbcUtil.getConnection(); 
+				PreparedStatement pstmt = con.prepareStatement(sql);) {
+			
+			pstmt.setInt(1, title.getCode());
+			System.out.println("pstmt >> "+pstmt);
+			
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return getTitle(rs);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
