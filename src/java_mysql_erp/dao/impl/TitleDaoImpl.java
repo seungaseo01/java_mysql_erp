@@ -52,10 +52,10 @@ public class TitleDaoImpl implements TitleDao {
 		String sql = "select  code,name from title where code = ? ";
 		try (Connection con = JdbcUtil.getConnection(); 
 				PreparedStatement pstmt = con.prepareStatement(sql);) {
-			
+
 			pstmt.setInt(1, title.getCode());
-			System.out.println("pstmt >> "+pstmt);
-			
+			System.out.println("pstmt >> " + pstmt);
+
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					return getTitle(rs);
@@ -70,12 +70,12 @@ public class TitleDaoImpl implements TitleDao {
 	@Override
 	public int insertTitle(Title title) {
 		String sql = "INSERT  INTO title VALUES(?, ?)";
-		try(Connection con = JdbcUtil.getConnection(); 
-				PreparedStatement pstmt = con.prepareStatement(sql);){
-			
+		try (Connection con = JdbcUtil.getConnection(); 
+				PreparedStatement pstmt = con.prepareStatement(sql);) {
+
 			pstmt.setInt(1, title.getCode());
 			pstmt.setString(2, title.getName());
-			
+
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,13 +85,32 @@ public class TitleDaoImpl implements TitleDao {
 
 	@Override
 	public int updateTitle(Title title) {
-		// TODO Auto-generated method stub
+		String sql = "update title set name = ? where code = ?";
+		try (Connection con = JdbcUtil.getConnection(); 
+				PreparedStatement pstmt = con.prepareStatement(sql);) {
+
+			pstmt.setString(1, title.getName());
+			pstmt.setInt(2, title.getCode());
+
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 
 	@Override
 	public int deleteTitle(Title title) {
-		// TODO Auto-generated method stub
+		String sql = "delete  from title  where code =?";
+		try (Connection con = JdbcUtil.getConnection(); 
+				PreparedStatement pstmt = con.prepareStatement(sql);) {
+
+			pstmt.setInt(1, title.getCode());
+
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 
